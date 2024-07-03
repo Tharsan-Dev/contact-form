@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us Modal Form</title>
+    <link href="style.css" rel="stylesheet" >
+</head>
+<body>
+
+    <div class="hero">
+        <button id="contact-us-btn">Contact Us</button>
+    </div>
+
+    <div class="modal" id="contact-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal-btn">&times;</span>
+            <h2>Contact Us</h2>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" >
+                    <div class="error-message" id="name-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" >
+                    <div class="error-message" id="address-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="text" id="phone" name="phone" >
+                    <div class="error-message" id="phone-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" >
+                    <div class="error-message" id="email-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" ></textarea>
+                    <div class="error-message" id="message-error"></div>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('contact-us-btn').addEventListener('click', () => {
+            document.getElementById('contact-modal').style.display = 'flex';
+        });
+
+        document.getElementById('close-modal-btn').addEventListener('click', () => {
+            document.getElementById('contact-modal').style.display = 'none';
+        });
+
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+            
+            const phoneRegex = /^\+94\d{9}$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            let isValid = true ;
+            
+            if (!name) {
+                document.getElementById('name-error').textContent = 'Name is required';
+                isValid = false;
+            } else {
+                document.getElementById('name-error').textContent = '';
+            }
+            
+            if (!address) {
+                document.getElementById('address-error').textContent = 'Address is required';
+                isValid = false;
+            } else {
+                document.getElementById('address-error').textContent = '';
+            }
+            
+            if (!phoneRegex.test(phone)) {
+                document.getElementById('phone-error').textContent = 'Phone number must start with +94 and be followed by exactly 9 digits';
+                isValid = false;
+            } else {
+                document.getElementById('phone-error').textContent = '';
+            }
+            
+            if (!emailRegex.test(email)) {
+                document.getElementById('email-error').textContent = 'Invalid email format';
+                isValid = false;
+            } else {
+                document.getElementById('email-error').textContent = '';
+            }
+            
+            if (message.length < 10) {
+                document.getElementById('message-error').textContent = 'Message must be at least 10 characters long';
+                isValid = false;
+            } else {
+                document.getElementById('message-error').textContent = '';
+            }
+            
+            if (isValid) {
+                const contactData = {
+                    name,
+                    address,
+                    phone,
+                    email,
+                    message
+                };
+                
+                localStorage.setItem('contactData', JSON.stringify(contactData));
+                
+                alert('Your message has been sent successfully!');
+                document.getElementById('contact-modal').style.display = 'none';
+                document.getElementById('contact-form').reset();
+            }
+        });
+    </script>
+
+</body>
+</html>
